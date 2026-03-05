@@ -1,0 +1,38 @@
+#brute force
+class Solution:
+    def sortColors(self, nums):
+        nums.sort()
+# Better
+
+class Solution:
+    def sortColors(self, nums):
+
+        count0 = nums.count(0)
+        count1 = nums.count(1)
+        count2 = nums.count(2)
+
+        nums[:count0] = [0]*count0
+        nums[count0:count0+count1] = [1]*count1
+        nums[count0+count1:] = [2]*count2
+
+# optimal
+class Solution:
+    def sortColors(self, arr: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        n = len(arr)
+        low = 0
+        mid = 0
+        high = n-1
+        while mid<=high:
+            if arr[mid]==0:
+                arr[low],arr[mid]=arr[mid],arr[low]
+                low+=1
+                mid+=1
+            elif arr[mid]==1:
+                mid+=1
+            else:
+                arr[high],arr[mid]=arr[mid],arr[high]
+                high-=1
+        return arr
