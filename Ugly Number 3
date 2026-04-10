@@ -1,0 +1,32 @@
+class Solution:
+    def nthUglyNumber(self, n: int, a: int, b: int, c: int) -> int:
+        
+        def gcd(x, y):
+            while y:
+                x, y = y, x % y
+            return x
+        
+        def lcm(x, y):
+            return x * y // gcd(x, y)
+        
+        ab = lcm(a, b)
+        bc = lcm(b, c)
+        ac = lcm(a, c)
+        abc = lcm(a, bc)
+        
+        def count(mid):
+            return (mid // a + mid // b + mid // c
+                    - mid // ab - mid // bc - mid // ac
+                    + mid // abc)
+        
+        left, right = 1, 2 * 10**9
+        
+        while left < right:
+            mid = (left + right) // 2
+            
+            if count(mid) >= n:
+                right = mid
+            else:
+                left = mid + 1
+        
+        return left
