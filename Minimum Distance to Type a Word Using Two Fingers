@@ -1,0 +1,33 @@
+class Solution:
+    def minimumDistance(self, word: str) -> int:
+        from functools import lru_cache
+
+        def get_pos(c):
+            idx = ord(c) - ord('A')
+            return (idx // 6, idx % 6)
+
+        def dist(a, b):
+            if a is None:
+                return 0
+            x1, y1 = a
+            x2, y2 = b
+            return abs(x1 - x2) + abs(y1 - y2)
+
+        @lru_cache(None)
+        def dp(i, other):
+            if i == len(word):
+                return 0
+
+            curr = get_pos(word[i])
+            prev = get_pos(word[i-1]) if i > 0 else None
+
+            # Option 1: move same finger
+            cost1 = dist(prev, curr) + dp(i+1, other)
+
+            # Option 2: move other finger
+            other_pos = None if other == -1 else get_pos(chr(other + ord('A')))
+            cost2 = dist(other_pos, curr) + dp(i+1, ord(word[i-1]) - ord('A') if i > 0 else -1)
+
+            return min(cost1, cost2)
+
+        return dp(0, -1)
