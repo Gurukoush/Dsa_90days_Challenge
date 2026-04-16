@@ -1,0 +1,32 @@
+class Solution:
+    def maxProfit(self, k: int, prices: List[int]) -> int:
+        n = len(prices)
+
+        # Case 1: Unlimited transactions
+        if k >= n // 2:
+            profit = 0
+            for i in range(1, n):
+                if prices[i] > prices[i-1]:
+                    profit += prices[i] - prices[i-1]
+            return profit
+
+        # Case 2: DP
+        dp = [[0] * (k+1) for _ in range(2)]
+
+        for i in range(n-1, -1, -1):
+            new_dp = [[0] * (k+1) for _ in range(2)]
+            for buy in range(2):
+                for cap in range(1, k+1):
+                    if buy:
+                        new_dp[buy][cap] = max(
+                            -prices[i] + dp[0][cap],
+                            dp[1][cap]
+                        )
+                    else:
+                        new_dp[buy][cap] = max(
+                            prices[i] + dp[1][cap-1],
+                            dp[0][cap]
+                        )
+            dp = new_dp
+
+        return dp[1][k]
