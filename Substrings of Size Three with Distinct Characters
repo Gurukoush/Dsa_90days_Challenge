@@ -1,0 +1,31 @@
+s = "aababcabc"
+n = len(s)
+
+ans = 0
+for i in range(n-2):
+    k = s[i:i+3]
+ 
+    
+    if k[0]!= k[1] and k[1]!=k[2] and k[0]!=k[2]:
+        ans+=1
+print(ans)
+
+
+
+class Solution:
+    def countGoodSubstrings(self, s: str) -> int:
+        
+        left, right = 0, 2
+        count = 0
+
+        while right <= len(s):
+            good_string = s[left:right + 1]
+            print(f"Good string is: {good_string}")
+            unique_chars = set(good_string)
+            if len(unique_chars) == 3:
+                count += 1
+
+            left += 1
+            right += 1
+
+        return count
